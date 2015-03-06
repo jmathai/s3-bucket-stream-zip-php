@@ -128,8 +128,6 @@ class S3BucketStreamZip
       curl_setopt($ch, CURLOPT_TIMEOUT, 120);
       curl_setopt($ch, CURLOPT_FILE, $fp);
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($ch, CURLOPT_VERBOSE, 0);
       curl_exec($ch);
       curl_close($ch);
       $zip->addFileFromStream($fileName, $fp);
