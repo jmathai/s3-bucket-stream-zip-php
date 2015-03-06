@@ -1,4 +1,7 @@
 <?php
+// since large buckets may take lots of time we remove any time limits
+set_time_limit(0);
+
 require sprintf('%s/../vendor/autoload.php', __DIR__);
 
 use S3BucketStreamZip\S3BucketStreamZip;
