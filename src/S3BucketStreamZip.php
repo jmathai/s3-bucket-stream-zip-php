@@ -125,7 +125,7 @@ class S3BucketStreamZip
       // Closing the file pointer removes the file.
       $fp = tmpfile();
       $ch = curl_init($signedUrl);
-      curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+      curl_setopt($ch, CURLOPT_TIMEOUT, 120);
       curl_setopt($ch, CURLOPT_FILE, $fp);
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
       $data = curl_exec($ch);
