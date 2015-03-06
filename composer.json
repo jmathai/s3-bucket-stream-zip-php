@@ -1,0 +1,31 @@
+{
+  "name": "jmathai/s3-bucket-stream-zip-php",
+  "homepage": "https://github.com/jmathai/s3-bucket-stream-zip-php",
+  "description": "PHP library to efficiently stream contents from an AWS S3 bucket or folder as a zip file",
+  "keywords": ["amazon","aws","s3","stream","zip","php","download"],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Jaisen Mathai",
+      "email": "jaisen@jmathai.com",
+      "homepage": "http://jaisenmathai.com/"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/jmathai/s3-bucket-stream-zip-php/issues"
+  },
+  "require": {
+    "php": ">=5.3.3",
+    "maennchen/zipstream-php": "0.3.*",
+    "aws/aws-sdk-php": "2.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "S3BucketStreamZip\\": "src/"
+    }
+  }
+}
