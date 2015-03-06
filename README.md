@@ -1,6 +1,8 @@
 # S3BucketStreamZip
 
 [![Build Status](https://travis-ci.org/jmathai/s3-bucket-stream-zip-php.svg?branch=master)](https://travis-ci.org/jmathai/s3-bucket-stream-zip-php)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=develop)
+[![Code Coverage](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=develop)
 
 ## Instalation
 Installation is done via composer by adding the a dependency on jmathai/s3-bucket-stream-zip-php.
