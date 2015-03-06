@@ -1,8 +1,8 @@
 # S3BucketStreamZip
 
 [![Build Status](https://travis-ci.org/jmathai/s3-bucket-stream-zip-php.svg?branch=master)](https://travis-ci.org/jmathai/s3-bucket-stream-zip-php)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=develop)
-[![Code Coverage](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=develop)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=master)
 
 ## Overview
 This library lets you efficiently stream the contents of an S3 bucket/folder as a zip file to the client.
