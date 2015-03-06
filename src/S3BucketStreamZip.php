@@ -22,17 +22,17 @@ use ZipStream;
 class S3BucketStreamZip
 {
  	/**
-  * @var array
+   * @var array
    *
    * {
    *   key: your_aws_key,
    *   secret: your_aws_secret
    * }
-  */
+   */
   private $auth   = array();
 
  	/**
-  * @var array
+   * @var array
    *
    * See the documentation for the List Objects API for valid parameters.
    * Only `Bucket` is required.
@@ -42,7 +42,7 @@ class S3BucketStreamZip
    * {
    *   Bucket: name_of_bucket
    * }
-  */
+   */
   private $params = array();
 
  	/**
@@ -51,8 +51,8 @@ class S3BucketStreamZip
   private $s3Client;
 
  	/**
-  * Create a new ZipStream object.
-  *
+   * Create a new ZipStream object.
+   *
    * @param Array $auth     - AWS key and secret
    * @param Array $params   - AWS List Object parameters
    */
@@ -77,8 +77,8 @@ class S3BucketStreamZip
   }
 
  	/**
-  * Stream a zip file to the client
-  *
+   * Stream a zip file to the client
+   *
    * @param String $filename  - Name for the file to be sent to the client
    * @param Array  $params    - Optional parameters
    *  {
