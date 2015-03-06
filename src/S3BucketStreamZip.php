@@ -21,7 +21,7 @@ use ZipStream;
 
 class S3BucketStreamZip
 {
- 	/**
+  /**
    * @var array
    *
    * {
@@ -31,7 +31,7 @@ class S3BucketStreamZip
    */
   private $auth   = array();
 
- 	/**
+  /**
    * @var array
    *
    * See the documentation for the List Objects API for valid parameters.
@@ -45,12 +45,12 @@ class S3BucketStreamZip
    */
   private $params = array();
 
- 	/**
-  * @var object
-  */
+  /**
+   * @var object
+   */
   private $s3Client;
 
- 	/**
+  /**
    * Create a new ZipStream object.
    *
    * @param Array $auth     - AWS key and secret
@@ -76,7 +76,7 @@ class S3BucketStreamZip
     $this->s3Client = S3Client::factory($this->auth);
   }
 
- 	/**
+  /**
    * Stream a zip file to the client
    *
    * @param String $filename  - Name for the file to be sent to the client
