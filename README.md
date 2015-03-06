@@ -7,7 +7,7 @@
 ## Overview
 This library lets you efficiently stream the contents of an S3 bucket/folder as a zip file to the client.
 
-## Instalation
+## Installation
 Installation is done via composer by adding the a dependency on jmathai/s3-bucket-stream-zip-php.
 
 ```json
