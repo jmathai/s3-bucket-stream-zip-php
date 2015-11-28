@@ -4,15 +4,15 @@
  * @copyright Copyright 2015, Jaisen Mathai
  */
 
-namespace S3BucketStreamZipTest;
+namespace JMathai\S3BucketStreamZipTest;
 
-use S3BucketStreamZip\S3BucketStreamZip;
+use JMathai\S3BucketStreamZip\S3BucketStreamZip;
 use PHPUnit_Framework_TestCase;
 
 class S3BucketStreamZipTest extends PHPUnit_Framework_TestCase
 {
   /**
-  * @expectedException \S3BucketStreamZip\Exception\InvalidParameterException
+  * @expectedException \JMathai\S3BucketStreamZip\Exception\InvalidParameterException
   */
   public function testInvalidParamsToConstructorKey()
   {
@@ -20,7 +20,7 @@ class S3BucketStreamZipTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-  * @expectedException \S3BucketStreamZip\Exception\InvalidParameterException
+  * @expectedException \JMathai\S3BucketStreamZip\Exception\InvalidParameterException
   */
   public function testInvalidParamsToConstructorSecret()
   {
@@ -28,7 +28,7 @@ class S3BucketStreamZipTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-  * @expectedException \S3BucketStreamZip\Exception\InvalidParameterException
+  * @expectedException \JMathai\S3BucketStreamZip\Exception\InvalidParameterException
   */
   public function testInvalidParamsToConstructorBucket()
   {
