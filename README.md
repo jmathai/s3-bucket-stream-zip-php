@@ -25,8 +25,8 @@ Installation is done via composer by adding the a dependency on jmathai/s3-bucke
 set_time_limit(0);
 require sprintf('%s/../vendor/autoload.php', __DIR__);
 
-use S3BucketStreamZip\S3BucketStreamZip;
-use S3BucketStreamZip\Exception\InvalidParameterException;
+use JMathai\S3BucketStreamZip\S3BucketStreamZip;
+use JMathai\S3BucketStreamZip\Exception\InvalidParameterException;
 
 $stream = new S3BucketStreamZip(
             // $auth
