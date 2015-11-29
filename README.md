@@ -10,12 +10,9 @@ This library lets you efficiently stream the contents of an S3 bucket/folder as 
 ## Installation
 Installation is done via composer by adding the a dependency on jmathai/s3-bucket-stream-zip-php.
 
-```json
-{
-  "require": {
-    "jmathai/s3-bucket-stream-zip-php": "dev-master"
-  }
-}
+```
+composer require jmathai/s3-bucket-stream-zip-php
+composer install
 ```
 
 ## Usage
