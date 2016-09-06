@@ -18,30 +18,30 @@ use ZipStream;
 class S3BucketStreamZip
 {
     /**
-    * @var array
-    *
-    * http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html
-    *
-    * {
-    *   key: access key,
-    *   secret: access secret
-    *   bucket: bucket name
-    *   region: bucket region
-    *   prefix: prefix
-    * }
-    */
+     * @var array
+     *
+     * http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html
+     *
+     * {
+     *   key: access key,
+     *   secret: access secret
+     *   bucket: bucket name
+     *   region: bucket region
+     *   prefix: prefix
+     * }
+     */
     private $params = [];
 
     /**
-    * @var object
-    */
+     * @var object
+     */
     private $s3Client;
 
     /**
-    * Create a new ZipStream object.
-    *
-    * @param array $params - AWS key, secret, region, and list object parameters
-    */
+     * Create a new ZipStream object.
+     *
+     * @param array $params - AWS key, secret, region, and list object parameters
+     */
     public function __construct($params)
     {
         foreach (['key', 'secret', 'bucket', 'region'] as $key) {
@@ -64,14 +64,14 @@ class S3BucketStreamZip
     }
 
     /**
-    * Stream a zip file to the client.
-    *
-    * @param string $filename - Name for the file to be sent to the client
-    * @param array  $params   - Optional parameters
-    * {
-    * expiration: '+10 minutes'
-    * }
-    */
+     * Stream a zip file to the client.
+     *
+     * @param string $filename - Name for the file to be sent to the client
+     * @param array  $params   - Optional parameters
+     *                         {
+     *                         expiration: '+10 minutes'
+     *                         }
+     */
     public function send($filename, $params = [])
     {
         // Set default values for the optional $params argument
