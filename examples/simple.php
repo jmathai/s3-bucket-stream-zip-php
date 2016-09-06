@@ -9,17 +9,12 @@ require sprintf('%s/../vendor/autoload.php', __DIR__);
 use JMathai\S3BucketStreamZip\S3BucketStreamZip;
 use JMathai\S3BucketStreamZip\Exception\InvalidParameterException;
 
-$stream = new S3BucketStreamZip(
-            // $auth
-            array(
-              'key'     => '*********',   // required
-              'secret'  => '*********'    // required
-            ),
-            // $params
-            array(
-              'Bucket'  => 'bucketname',  // required
-              'Prefix'  => 'subfolder/'   // optional (path to folder to stream)
-            )
-          );
+$stream = new S3BucketStreamZip([
+    'key' => 'your-key-goes-here',
+    'secret' => 'your-secret-goes-here',
+    'bucket' => 'the-name-of-your-bucket',
+    'region' => 'the-region-of-your-bucket',
+    'prefix' => 'prefix-of-the-files-to-zip',
+  ]);
 
 $stream->send('name-of-zipfile-to-send.zip');
