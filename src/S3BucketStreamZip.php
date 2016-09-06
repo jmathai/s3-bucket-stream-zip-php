@@ -53,27 +53,27 @@ class S3BucketStreamZip
   /**
    * Create a new ZipStream object.
    *
-   * @param Array $auth     - AWS key and secret
-   * @param Array $params   - AWS List Object parameters
+   * @param Array $params   - AWS key, secret, region, and list object parameters
    */
-  public function __construct($auth, $params)
+  public function __construct($params)
   {
-    // We require the AWS key to be passed in $auth.
-    if(!isset($auth['key']))
-      throw new InvalidParameterException('$auth parameter to constructor requires a `key` attribute');
 
-    // We require the AWS secret to be passed in $auth.
-    if(!isset($auth['secret']))
-      throw new InvalidParameterException('$auth parameter to constructor requires a `secret` attribute');
+    foreach (['key', 'secret', 'bucket', 'region'] as $key) {
+      if(!isset($params[$key])) {
+        throw new InvalidParameterException('$params parameter to constructor requires a `'.$key.'` attribute');
+      }
+    }
 
-    // We require the AWS S3 bucket to be passed in $params.
-    if(!isset($params['Bucket']))
-      throw new InvalidParameterException('$params parameter to constructor requires a `Bucket` attribute (with a capital B)');
-
-    $this->auth   = $auth;
     $this->params = $params;
 
-    $this->s3Client = S3Client::factory($this->auth);
+    $this->s3Client = new S3Client([
+      'region'  => $this->params['Region'],
+      'version' => 'latest',
+      'credentials' => [
+        'key'    => $this->params['key'],
+        'secret' => $this->params['secret'],
+    ]
+    ]);
   }
 
   /**
@@ -110,17 +110,18 @@ class S3BucketStreamZip
         'Bucket' => $this->params['Bucket'],
         'Key' => $file['Key']
       ));
-      $signedUrl = $command->createPresignedUrl($params['expiration']);
-      
-      // Get the file name on S3 so we can save it to the zip file 
+      $signedUrl = (string) $this->s3Client->createPresignedRequest($command, $params['expiration'])->getUri();
+
+
+      // Get the file name on S3 so we can save it to the zip file
       //  using the same name.
       $fileName = basename($file['Key']);
 
       // We want to fetch the file to a file pointer so we create it here
-      //  and create a curl request and store the response into the file 
+      //  and create a curl request and store the response into the file
       //  pointer.
       // After we've fetched the file we add the file to the zip file using
-      //  the file pointer and then we close the curl request and the file 
+      //  the file pointer and then we close the curl request and the file
       //  pointer.
       // Closing the file pointer removes the file.
       $fp = tmpfile();
