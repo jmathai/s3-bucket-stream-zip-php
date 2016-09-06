@@ -10,7 +10,7 @@ require sprintf('%s/../vendor/autoload.php', __DIR__);
 use JMathai\S3BucketStreamZip\S3BucketStreamZip;
 
 $stream = new S3BucketStreamZip([
-    'key' => 'your-key-goes-here',
+    'key'    => 'your-key-goes-here',
     'secret' => 'your-secret-goes-here',
     'bucket' => 'the-name-of-your-bucket',
     'region' => 'the-region-of-your-bucket',
