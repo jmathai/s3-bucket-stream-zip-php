@@ -8,4 +8,6 @@ namespace JMathai\S3BucketStreamZip\Exception;
 
 use JMathai\S3BucketStreamZip\Exception;
 
-class InvalidParameterException extends Exception {}
+class InvalidParameterException extends Exception
+{
+}

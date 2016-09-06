@@ -9,19 +9,15 @@
  *
  * Example usage can be found in the examples folder.
  */
-
 namespace JMathai\S3BucketStreamZip;
 
-use JMathai\S3BucketStreamZip\Exception\InvalidParameterException;
-
 use Aws\S3\S3Client;
-use Aws\S3\Exception\S3Exception;
-
+use JMathai\S3BucketStreamZip\Exception\InvalidParameterException;
 use ZipStream;
 
 class S3BucketStreamZip
 {
-  /**
+    /**
    * @var array
    *
    * {
@@ -29,7 +25,7 @@ class S3BucketStreamZip
    *   secret: your_aws_secret
    * }
    */
-  private $auth   = array();
+  private $auth = [];
 
   /**
    * @var array
@@ -43,7 +39,7 @@ class S3BucketStreamZip
    *   Bucket: name_of_bucket
    * }
    */
-  private $params = array();
+  private $params = [];
 
   /**
    * @var object
@@ -53,43 +49,43 @@ class S3BucketStreamZip
   /**
    * Create a new ZipStream object.
    *
-   * @param Array $params   - AWS key, secret, region, and list object parameters
+   * @param array $params   - AWS key, secret, region, and list object parameters
    */
   public function __construct($params)
   {
-
-    foreach (['key', 'secret', 'bucket', 'region'] as $key) {
-      if(!isset($params[$key])) {
-        throw new InvalidParameterException('$params parameter to constructor requires a `'.$key.'` attribute');
+      foreach (['key', 'secret', 'bucket', 'region'] as $key) {
+          if (!isset($params[$key])) {
+              throw new InvalidParameterException('$params parameter to constructor requires a `'.$key.'` attribute');
+          }
       }
-    }
 
-    $this->params = $params;
+      $this->params = $params;
 
-    $this->s3Client = new S3Client([
-      'region'  => $this->params['Region'],
-      'version' => 'latest',
+      $this->s3Client = new S3Client([
+      'region'      => $this->params['Region'],
+      'version'     => 'latest',
       'credentials' => [
         'key'    => $this->params['key'],
         'secret' => $this->params['secret'],
-    ]
+    ],
     ]);
   }
 
   /**
-   * Stream a zip file to the client
+   * Stream a zip file to the client.
    *
-   * @param String $filename  - Name for the file to be sent to the client
-   * @param Array  $params    - Optional parameters
+   * @param string $filename  - Name for the file to be sent to the client
+   * @param array  $params    - Optional parameters
    *  {
    *    expiration: '+10 minutes'
    *  }
    */
-  public function send($filename, $params = array())
+  public function send($filename, $params = [])
   {
-    // Set default values for the optional $params argument
-    if(!isset($params['expiration']))
-      $params['expiration'] = '+10 minutes';
+      // Set default values for the optional $params argument
+    if (!isset($params['expiration'])) {
+        $params['expiration'] = '+10 minutes';
+    }
 
     // Initialize the ZipStream object and pass in the file name which
     //  will be what is sent in the content-disposition header.
@@ -102,15 +98,14 @@ class S3BucketStreamZip
     $result = $this->s3Client->getIterator('ListObjects', $this->params);
 
     // We loop over each object from the ListObjects call.
-    foreach($result as $file)
-    {
-      // We need to use a command to get a request for the S3 object
+    foreach ($result as $file) {
+        // We need to use a command to get a request for the S3 object
       //  and then we can get the presigned URL.
-      $command = $this->s3Client->getCommand('GetObject', array(
+      $command = $this->s3Client->getCommand('GetObject', [
         'Bucket' => $this->params['Bucket'],
-        'Key' => $file['Key']
-      ));
-      $signedUrl = (string) $this->s3Client->createPresignedRequest($command, $params['expiration'])->getUri();
+        'Key'    => $file['Key'],
+      ]);
+        $signedUrl = (string) $this->s3Client->createPresignedRequest($command, $params['expiration'])->getUri();
 
 
       // Get the file name on S3 so we can save it to the zip file
@@ -125,14 +120,14 @@ class S3BucketStreamZip
       //  pointer.
       // Closing the file pointer removes the file.
       $fp = tmpfile();
-      $ch = curl_init($signedUrl);
-      curl_setopt($ch, CURLOPT_TIMEOUT, 120);
-      curl_setopt($ch, CURLOPT_FILE, $fp);
-      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-      curl_exec($ch);
-      curl_close($ch);
-      $zip->addFileFromStream($fileName, $fp);
-      fclose($fp);
+        $ch = curl_init($signedUrl);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_exec($ch);
+        curl_close($ch);
+        $zip->addFileFromStream($fileName, $fp);
+        fclose($fp);
     }
 
     // Finalize the zip file.
