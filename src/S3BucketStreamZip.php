@@ -89,7 +89,8 @@ class S3BucketStreamZip
         //  to manually loop over responses.
         $result = $this->s3Client->getIterator('ListObjects', [
             'Bucket' => $this->params['bucket'],
-            ]);
+            'Prefix' => $this->params['prefix'],
+        ]);
 
         // We loop over each object from the ListObjects call.
         foreach ($result as $file) {
