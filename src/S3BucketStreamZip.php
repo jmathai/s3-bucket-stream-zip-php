@@ -105,7 +105,7 @@ class S3BucketStreamZip
 
             // Get the file name on S3 so we can save it to the zip file
             //  using the same name.
-            $fileName = basename($file['Key']);
+            $fileName = substr($file['Key'], strlen($this->params['prefix']));
 
             // We want to fetch the file to a file pointer so we create it here
             //  and create a curl request and store the response into the file
