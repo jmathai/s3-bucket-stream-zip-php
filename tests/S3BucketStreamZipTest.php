@@ -15,7 +15,7 @@ class S3BucketStreamZipTest extends PHPUnit_Framework_TestCase
    */
   public function testInvalidParamsToConstructorKey()
   {
-      $client = new S3BucketStreamZip([], []);
+      $client = new S3BucketStreamZip([]);
   }
 
   /**
@@ -23,7 +23,7 @@ class S3BucketStreamZipTest extends PHPUnit_Framework_TestCase
    */
   public function testInvalidParamsToConstructorSecret()
   {
-      $client = new S3BucketStreamZip(['key' => 'foo'], []);
+      $client = new S3BucketStreamZip(['key' => 'foo']);
   }
 
   /**
@@ -31,11 +31,11 @@ class S3BucketStreamZipTest extends PHPUnit_Framework_TestCase
    */
   public function testInvalidParamsToConstructorBucket()
   {
-      $client = new S3BucketStreamZip(['key' => 'foo', 'secret' => 'bar'], []);
+      $client = new S3BucketStreamZip(['key' => 'foo', 'secret' => 'bar']);
   }
 
     public function testValidParamsToConstructor()
     {
-        $client = new S3BucketStreamZip(['key' => 'foo', 'secret' => 'bar'], ['Bucket' => 'foobar']);
+        $client = new S3BucketStreamZip(['key' => 'foo', 'secret' => 'bar', 'bucket' => 'foobar', 'region' => 'baz']);
     }
 }
