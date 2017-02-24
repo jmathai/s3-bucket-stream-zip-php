@@ -9,6 +9,7 @@
 *
 * Example usage can be found in the examples folder.
 */
+
 namespace JMathai\S3BucketStreamZip;
 
 use Aws\S3\S3Client;
@@ -101,7 +102,6 @@ class S3BucketStreamZip
                 'Key'    => $file['Key'],
             ]);
             $signedUrl = (string) $this->s3Client->createPresignedRequest($command, $params['expiration'])->getUri();
-
 
             // Get the file name on S3 so we can save it to the zip file
             //  using the same name.
