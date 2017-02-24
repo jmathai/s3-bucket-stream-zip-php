@@ -21,7 +21,7 @@
     "issues": "https://github.com/limenet/s3-bucket-stream-zip-php/issues"
   },
   "require": {
-    "php": ">=5.3.3",
+    "php": ">=7.0",
     "maennchen/zipstream-php": "0.4.*",
     "aws/aws-sdk-php": "^3.0"
   },
