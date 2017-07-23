@@ -9,7 +9,7 @@ use ZipStream\ZipStream;
 
 class S3BucketStreamZip
 {
-    public const MAX_ARCHIVE_SIZE = 1073741824; // 2^30 * 2 = 2 GB
+    public const MAX_ARCHIVE_SIZE = 1073741824;
 
     protected $auth = [];
 
