@@ -92,14 +92,11 @@ class S3BucketStreamZip
         $this->doesDirectoryExist($params);
 
         $zip = new ZipStream($filename);
-        // The iterator fetches ALL of the objects without having to manually loop over responses.
-        $files = $this->s3Client->getIterator('ListObjects', $params);
 
         $parts = $this->parts();
 
         // Add each object from the ListObjects call to the new zip file.
         foreach ($parts[$this->part] as $file) {
-            var_dump($file['Size']);
             // Get the file name on S3 so we can save it to the zip file using the same name.
             $fileName = basename($file['Key']);
 
@@ -124,6 +121,7 @@ class S3BucketStreamZip
 
         $this->doesDirectoryExist($params);
 
+        // The iterator fetches ALL of the objects without having to manually loop over responses.
         $files = $this->s3Client->getIterator('ListObjects', $params);
 
         $parts = [0 => []];
