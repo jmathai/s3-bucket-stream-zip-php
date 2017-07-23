@@ -15,7 +15,6 @@ Uses v3 of AWS SDK to stream files directly from S3.
 
 ```
 composer require limenet/s3-bucket-stream-zip-php
-composer install
 ```
 
 ## Usage
