@@ -4,11 +4,14 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/?branch=master)
 
+Forked from `jmathai/s3-bucket-stream-zip-php` and `michaeltlee/s3-bucket-stream-zip-php`
+
 ## Overview
 This library lets you efficiently stream the contents of an S3 bucket/folder as a zip file to the client.
 
+Uses v3 of AWS SDK to stream files directly from S3.
+
 ## Installation
-Installation is done via composer by adding the a dependency on limenet/s3-bucket-stream-zip-php.
 
 ```
 composer require limenet/s3-bucket-stream-zip-php
@@ -16,28 +19,34 @@ composer install
 ```
 
 ## Usage
+
+See `examples/simple.php`.
+
+## Laravel 5.4
+
+in `config/app.php`:
+
 ```php
-// taken from examples/simple.php
+'providers' => [
+    ...
+    limenet\S3BucketStreamZip\AWSZipStreamServiceProvider::class,
+    ...
+]
+```
 
-require 'vendor/autoload.php';
-
-use JMathai\S3BucketStreamZip\S3BucketStreamZip;
-
-$stream = new S3BucketStreamZip([
-    'key'    => 'your-key-goes-here',
-    'secret' => 'your-secret-goes-here',
-    'bucket' => 'the-name-of-your-bucket',
-    'region' => 'the-region-of-your-bucket',
-    'prefix' => 'prefix-of-the-files-to-zip',
-  ]);
-
-$stream->send('name-of-zipfile-to-send.zip');
-
-
+in `config/services.php`, set:
+```php
+'s3' => [
+    'key'     => '',
+    'secret'  => '',
+    'region'  => '',
+    'version' => '',
+];
 ```
 
 ## Authors
 * Jaisen Mathai <jaisen@jmathai.com> - http://jaisenmathai.com
+* [@Michaeltlee](https://github.com/Michaeltlee)
 * Linus Metzler <hi@linusmetzler.me> - https://linusmetzler.me
 
 ## Dependencies

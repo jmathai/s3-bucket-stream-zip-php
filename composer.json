@@ -1,6 +1,6 @@
 {
-  "name": "limenet/s3-bucket-stream-zip-php",
-  "homepage": "https://github.com/limenet/s3-bucket-stream-zip-php",
+  "name": "michaeltlee/s3-bucket-stream-zip-php",
+  "homepage": "https://github.com/michaeltlee/s3-bucket-stream-zip-php",
   "description": "PHP library to efficiently stream contents from an AWS S3 bucket or folder as a zip file",
   "keywords": ["amazon","aws","s3","stream","zip","php","download"],
   "type": "library",
@@ -22,15 +22,15 @@
   },
   "require": {
     "php": ">=7.0",
-    "maennchen/zipstream-php": "0.4.*",
-    "aws/aws-sdk-php": "^3.0"
+    "maennchen/zipstream-php": "0.3.*",
+    "aws/aws-sdk-php": "3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~5.0"
   },
   "autoload": {
     "psr-4": {
-      "JMathai\\S3BucketStreamZip\\": "src/"
+      "limenet\\S3BucketStreamZip\\": "src/"
     }
   }
 }

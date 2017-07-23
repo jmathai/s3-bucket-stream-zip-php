@@ -1,131 +1,172 @@
 <?php
-/**
-* @author Jaisen Mathai <jaisen@jmathai.com>
-* @copyright Copyright 2015, Jaisen Mathai
-*
-* This library streams the contents from an Amazon S3 bucket
-*  without needing to store the files on disk or download
-*  all of the files before starting to send the archive.
-*
-* Example usage can be found in the examples folder.
-*/
 
-namespace JMathai\S3BucketStreamZip;
+namespace limenet\S3BucketStreamZip;
 
+use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
-use JMathai\S3BucketStreamZip\Exception\InvalidParameterException;
-use ZipStream;
+use limenet\S3BucketStreamZip\Exception\InvalidParameterException;
+use ZipStream\ZipStream;
 
 class S3BucketStreamZip
 {
-    /**
-     * @var array
-     *
-     * http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html
-     *
-     * {
-     *   key: access key,
-     *   secret: access secret
-     *   bucket: bucket name
-     *   region: bucket region
-     *   prefix: prefix
-     * }
-     */
-    private $params = [];
+    public const MAX_ARCHIVE_SIZE = 2147483648; // 2^30 * 2 = 2 GB
 
-    /**
-     * @var object
-     */
-    private $s3Client;
+    protected $auth = [];
+
+    protected $s3Client;
+
+    protected $params;
+
+    protected $part;
 
     /**
      * Create a new ZipStream object.
      *
-     * @param array $params - AWS key, secret, region, and list object parameters
+     * @param array $auth - AWS key and secret
+     * @throws InvalidParameterException
      */
-    public function __construct($params)
+    public function __construct($auth, $part = 0)
     {
-        foreach (['key', 'secret', 'bucket', 'region'] as $key) {
-            if (!isset($params[$key])) {
-                throw new InvalidParameterException('$params parameter to constructor requires a `'.$key.'` attribute');
-            }
-        }
+        $this->validateAuth($auth);
 
-        $this->params = $params;
+        $this->auth = $auth;
+        $this->part = $part;
 
-        $this->s3Client = new S3Client(
-            [
-                'region'      => $this->params['region'],
-                'version'     => 'latest',
-                'credentials' => [
-                'key'    => $this->params['key'],
-                'secret' => $this->params['secret'],
+        // S3 User in $this->auth should have permission to execute ListBucket on any buckets
+        // AND GetObject on any object with which you need to interact.
+        $this->s3Client = new S3Client([
+            'version'     => (isset($this->auth['version'])) ? $this->auth['version'] : 'latest',
+            'region'      => (isset($this->auth['region'])) ? $this->auth['region'] : 'us-east-1',
+            'credentials' => [
+                'key'    => $this->auth['key'],
+                'secret' => $this->auth['secret'],
             ],
         ]);
+
+        // Register the stream wrapper from an S3Client object
+        // This allows you to access buckets and objects stored in Amazon S3 using the s3:// protocol
+        $this->s3Client->registerStreamWrapper();
+    }
+
+    public function bucket($bucket)
+    {
+        $this->params = new S3Params($bucket);
+
+        return $this;
+    }
+
+    public function prefix($prefix)
+    {
+        $this->params->setParam('Prefix', rtrim($prefix, '/') . '/');
+
+        return $this;
+    }
+
+    public function addParams(array $params)
+    {
+        foreach($params as $key => $value) {
+            $this->params->setParam($key, $value);
+        }
+
+        return $this;
     }
 
     /**
-     * Stream a zip file to the client.
+     * Stream a zip file to the client
      *
      * @param string $filename - Name for the file to be sent to the client
-     * @param array  $params   - Optional parameters
-     *                         {
-     *                         expiration: '+10 minutes'
-     *                         }
+     * $filename will be what is sent in the content-disposition header
+     * @throws InvalidParameterException
+     * @internal param array - See the documentation for the List Objects API for valid parameters.
+     * Only `Bucket` is required.
+     *
+     * http://docs.aws.amazon.com/AmazonS3/latest/API/RESTBucketGET.html
      */
-    public function send($filename, $params = [])
+    public function send($filename)
     {
-        // Set default values for the optional $params argument
-        if (!isset($params['expiration'])) {
-            $params['expiration'] = '+10 minutes';
-        }
+        $params = $this->params->getParams();
 
-        // Initialize the ZipStream object and pass in the file name which
-        //  will be what is sent in the content-disposition header.
-        // This is the name of the file which will be sent to the client.
-        $zip = new ZipStream\ZipStream($filename);
+        $this->doesDirectoryExist($params);
 
-        // Get a list of objects from the S3 bucket. The iterator is a high
-        //  level abstration that will fetch ALL of the objects without having
-        //  to manually loop over responses.
-        $result = $this->s3Client->getIterator('ListObjects', [
-            'Bucket' => $this->params['bucket'],
-            'Prefix' => $this->params['prefix'],
-        ]);
+        $zip = new ZipStream($filename);
+        // The iterator fetches ALL of the objects without having to manually loop over responses.
+        $files = $this->s3Client->getIterator('ListObjects', $params);
 
-        // We loop over each object from the ListObjects call.
-        foreach ($result as $file) {
-            // We need to use a command to get a request for the S3 object
-            //  and then we can get the presigned URL.
-            $command = $this->s3Client->getCommand('GetObject', [
-                'Bucket' => $this->params['bucket'],
-                'Key'    => $file['Key'],
-            ]);
-            $signedUrl = (string) $this->s3Client->createPresignedRequest($command, $params['expiration'])->getUri();
+        $parts = $this->parts();
 
-            // Get the file name on S3 so we can save it to the zip file
-            //  using the same name.
-            $fileName = substr($file['Key'], strlen($this->params['prefix']));
+        // Add each object from the ListObjects call to the new zip file.
+        foreach ($parts[$this->part] as $file) {
+            var_dump($file['Size']);
+            // Get the file name on S3 so we can save it to the zip file using the same name.
+            $fileName = basename($file['Key']);
 
-            // We want to fetch the file to a file pointer so we create it here
-            //  and create a curl request and store the response into the file
-            //  pointer.
-            // After we've fetched the file we add the file to the zip file using
-            //  the file pointer and then we close the curl request and the file
-            //  pointer.
-            // Closing the file pointer removes the file.
-            $fp = tmpfile();
-            $ch = curl_init($signedUrl);
-            curl_setopt($ch, CURLOPT_TIMEOUT, 120);
-            curl_setopt($ch, CURLOPT_FILE, $fp);
-            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-            curl_exec($ch);
-            curl_close($ch);
-            $zip->addFileFromStream($fileName, $fp);
-            fclose($fp);
+            if (is_file("s3://{$params['Bucket']}/{$file['Key']}")) {
+                $context = stream_context_create([
+                    's3' => ['seekable' => true]
+                ]);
+                // open seekable(!) stream
+                if ($stream = fopen("s3://{$params['Bucket']}/{$file['Key']}", 'r', false, $context)) {
+                    $zip->addFileFromStream($fileName, $stream);
+                }
+            }
         }
 
         // Finalize the zip file.
         $zip->finish();
+    }
+
+    public function parts()
+    {
+        $params = $this->params->getParams();
+
+        $this->doesDirectoryExist($params);
+
+        $files = $this->s3Client->getIterator('ListObjects', $params);
+
+        $parts = [0 => []];
+        $partSizes = [0 => 0];
+        $currentPart = 0;
+        foreach ($files as $file) {
+            if ($partSizes[$currentPart] + $file['Size'] > self::MAX_ARCHIVE_SIZE) {
+                $currentPart++;
+                $parts[$currentPart] = [];
+                $partSizes[$currentPart] = 0;
+            }
+            $parts[$currentPart][] = $file;
+            $partSizes[$currentPart] += $file['Size'];
+        };
+
+        return $parts;
+    }
+
+    protected function validateAuth($auth)
+    {
+        // We require the AWS key to be passed in $auth.
+        if (!isset($auth['key'])) {
+            throw new InvalidParameterException('$auth parameter to constructor requires a `key` attribute');
+        }
+
+        // We require the AWS secret to be passed in $auth.
+        if (!isset($auth['secret'])) {
+            throw new InvalidParameterException('$auth parameter to constructor requires a `secret` attribute');
+        }
+    }
+
+    protected function doesDirectoryExist($params)
+    {
+        $command = $this->s3Client->getCommand('listObjects', $params);
+
+        try {
+            $result = $this->s3Client->execute($command);
+
+            if (empty($result['Contents']) && empty($result['CommonPrefixes'])) {
+                throw new InvalidParameterException('Bucket or Prefix does not exist');
+            }
+        } catch (S3Exception $e) {
+            if ($e->getStatusCode() === 403) {
+                return false;
+            }
+            throw $e;
+        }
     }
 }
