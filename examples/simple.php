@@ -1,4 +1,5 @@
 <?php
+
 // since large buckets may take lots of time we remove any time limits
 set_time_limit(0);
 // set a default time zone in case it's not set
@@ -27,4 +28,3 @@ try {
 } catch (S3Exception $e) {
     echo $e->getMessage();
 }
-

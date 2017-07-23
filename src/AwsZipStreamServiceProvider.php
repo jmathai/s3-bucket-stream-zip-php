@@ -4,7 +4,7 @@ namespace limenet\S3BucketStreamZip;
 
 use Illuminate\Support\ServiceProvider;
 
-class AWSZipStreamServiceProvider extends ServiceProvider
+class AwsZipStreamServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -20,7 +20,6 @@ class AWSZipStreamServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
     }
 
     /**
@@ -30,7 +29,7 @@ class AWSZipStreamServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind(S3BucketStreamZip::class, function($_) {
+        $this->app->bind(S3BucketStreamZip::class, function ($_) {
             return new S3BucketStreamZip([
                 'key'     => config('services.s3.key'),
                 'secret'  => config('services.s3.secret'),

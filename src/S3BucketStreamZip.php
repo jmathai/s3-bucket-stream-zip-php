@@ -23,6 +23,7 @@ class S3BucketStreamZip
      * Create a new ZipStream object.
      *
      * @param array $auth - AWS key and secret
+     *
      * @throws InvalidParameterException
      */
     public function __construct($auth, $part = 0)
@@ -57,14 +58,14 @@ class S3BucketStreamZip
 
     public function prefix($prefix)
     {
-        $this->params->setParam('Prefix', rtrim($prefix, '/') . '/');
+        $this->params->setParam('Prefix', rtrim($prefix, '/').'/');
 
         return $this;
     }
 
     public function addParams(array $params)
     {
-        foreach($params as $key => $value) {
+        foreach ($params as $key => $value) {
             $this->params->setParam($key, $value);
         }
 
@@ -72,11 +73,13 @@ class S3BucketStreamZip
     }
 
     /**
-     * Stream a zip file to the client
+     * Stream a zip file to the client.
      *
      * @param string $filename - Name for the file to be sent to the client
-     * $filename will be what is sent in the content-disposition header
+     *                         $filename will be what is sent in the content-disposition header
+     *
      * @throws InvalidParameterException
+     *
      * @internal param array - See the documentation for the List Objects API for valid parameters.
      * Only `Bucket` is required.
      *
@@ -102,7 +105,7 @@ class S3BucketStreamZip
 
             if (is_file("s3://{$params['Bucket']}/{$file['Key']}")) {
                 $context = stream_context_create([
-                    's3' => ['seekable' => true]
+                    's3' => ['seekable' => true],
                 ]);
                 // open seekable(!) stream
                 if ($stream = fopen("s3://{$params['Bucket']}/{$file['Key']}", 'r', false, $context)) {
@@ -134,7 +137,7 @@ class S3BucketStreamZip
             }
             $parts[$currentPart][] = $file;
             $partSizes[$currentPart] += $file['Size'];
-        };
+        }
 
         return $parts;
     }
