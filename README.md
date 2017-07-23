@@ -29,7 +29,7 @@ in `config/app.php`:
 ```php
 'providers' => [
     ...
-    limenet\S3BucketStreamZip\AWSZipStreamServiceProvider::class,
+    limenet\S3BucketStreamZip\AwsZipStreamServiceProvider::class,
     ...
 ]
 ```
