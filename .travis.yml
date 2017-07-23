@@ -1,11 +1,9 @@
 language: php
 php:
-  - 5.6
-  - 5.5
-  - 5.4
-  - 5.3
+  - nightly
+  - 7.1
 install: composer install
 script: phpunit --coverage-clover=coverage.clover
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover --repository=limenet/s3-bucket-stream-zip-php

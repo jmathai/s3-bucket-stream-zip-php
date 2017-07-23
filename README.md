@@ -1,49 +1,52 @@
 # S3BucketStreamZip
 
-[![Build Status](https://travis-ci.org/jmathai/s3-bucket-stream-zip-php.svg?branch=master)](https://travis-ci.org/jmathai/s3-bucket-stream-zip-php)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jmathai/s3-bucket-stream-zip-php/?branch=master)
+[![Build Status](https://travis-ci.org/limenet/s3-bucket-stream-zip-php.svg?branch=master)](https://travis-ci.org/limenet/s3-bucket-stream-zip-php)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/limenet/s3-bucket-stream-zip-php/?branch=master)
+
+Forked from `jmathai/s3-bucket-stream-zip-php` and `michaeltlee/s3-bucket-stream-zip-php`
 
 ## Overview
 This library lets you efficiently stream the contents of an S3 bucket/folder as a zip file to the client.
 
+Uses v3 of AWS SDK to stream files directly from S3.
+
 ## Installation
-Installation is done via composer by adding the a dependency on jmathai/s3-bucket-stream-zip-php.
 
 ```
-composer require jmathai/s3-bucket-stream-zip-php
-composer install
+composer require limenet/s3-bucket-stream-zip-php
 ```
 
 ## Usage
+
+See `examples/simple.php`.
+
+## Laravel 5.4
+
+in `config/app.php`:
+
 ```php
-// taken from examples/simple.php
-// since large buckets may take lots of time we remove any time limits
-set_time_limit(0);
-require sprintf('%s/../vendor/autoload.php', __DIR__);
+'providers' => [
+    ...
+    limenet\S3BucketStreamZip\AwsZipStreamServiceProvider::class,
+    ...
+]
+```
 
-use JMathai\S3BucketStreamZip\S3BucketStreamZip;
-use JMathai\S3BucketStreamZip\Exception\InvalidParameterException;
-
-$stream = new S3BucketStreamZip(
-            // $auth
-            array(
-              'key'     => '*********',   // required
-              'secret'  => '*********'    // required
-            ),
-            // $params
-            array(
-              'Bucket'  => 'bucketname',  // required
-              'Prefix'  => 'subfolder/'   // optional (path to folder to stream)
-            )
-          );
-
-$stream->send('name-of-zipfile-to-send.zip');
-
+in `config/services.php`, set:
+```php
+'s3' => [
+    'key'     => '',
+    'secret'  => '',
+    'region'  => '',
+    'version' => '',
+];
 ```
 
 ## Authors
 * Jaisen Mathai <jaisen@jmathai.com> - http://jaisenmathai.com
+* [@Michaeltlee](https://github.com/Michaeltlee)
+* Linus Metzler <hi@linusmetzler.me> - https://linusmetzler.me
 
 ## Dependencies
 * Paul Duncan <pabs@pablotron.org> - http://pablotron.org/
