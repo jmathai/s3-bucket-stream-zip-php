@@ -4,39 +4,47 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b204fb4a7fc5c54a05ee4697272cef4",
+    "content-hash": "0d355b471209f38e044b06e6594813db",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.0.0",
+            "version": "3.31.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4018c8f14a9e53003bb0417fa859c6a7ad57b53b"
+                "reference": "9829a8183016df800110148b467179d67c434f90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4018c8f14a9e53003bb0417fa859c6a7ad57b53b",
-                "reference": "4018c8f14a9e53003bb0417fa859c6a7ad57b53b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9829a8183016df800110148b467179d67c434f90",
+                "reference": "9829a8183016df800110148b467179d67c434f90",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/guzzle": "^5.3 || ^6.0.1",
-                "guzzlehttp/promises": "^1.0.0",
-                "guzzlehttp/psr7": "^1.0.0",
-                "mtdowling/jmespath.php": "^2.2",
+                "guzzlehttp/guzzle": "^5.3.1|^6.2.1",
+                "guzzlehttp/promises": "~1.0",
+                "guzzlehttp/psr7": "^1.4.1",
+                "mtdowling/jmespath.php": "~2.2",
                 "php": ">=5.5"
             },
             "require-dev": {
+                "andrewsville/php-token-reflection": "^1.4",
+                "aws/aws-php-sns-message-validator": "~1.0",
+                "behat/behat": "~3.0",
+                "doctrine/cache": "~1.4",
                 "ext-dom": "*",
                 "ext-json": "*",
                 "ext-openssl": "*",
                 "ext-pcre": "*",
                 "ext-simplexml": "*",
                 "ext-spl": "*",
-                "phpunit/phpunit": "^4.0"
+                "nette/neon": "^2.3",
+                "phpunit/phpunit": "^4.8.35|^5.4.0",
+                "psr/cache": "^1.0"
             },
             "suggest": {
+                "aws/aws-php-sns-message-validator": "To validate incoming SNS notifications",
+                "doctrine/cache": "To use the DoctrineCacheAdapter",
                 "ext-curl": "To send requests using cURL",
                 "ext-openssl": "Allows working with CloudFront private distributions and verifying received SNS messages"
             },
@@ -76,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2015-05-27T20:07:42+00:00"
+            "time": "2017-07-20T22:22:05+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -261,21 +269,21 @@
         },
         {
             "name": "maennchen/zipstream-php",
-            "version": "0.3.1",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/maennchen/ZipStream-PHP.git",
-                "reference": "c492ddf4abcb0f6bed287faae35ebe77be7b690f"
+                "reference": "89e0cdb3c9ecabef4da988852003781a7802afb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/c492ddf4abcb0f6bed287faae35ebe77be7b690f",
-                "reference": "c492ddf4abcb0f6bed287faae35ebe77be7b690f",
+                "url": "https://api.github.com/repos/maennchen/ZipStream-PHP/zipball/89e0cdb3c9ecabef4da988852003781a7802afb7",
+                "reference": "89e0cdb3c9ecabef4da988852003781a7802afb7",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">= 5.3"
+                "php": ">= 5.6"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.3.*"
@@ -309,7 +317,7 @@
                 "stream",
                 "zip"
             ],
-            "time": "2016-02-27T22:32:42+00:00"
+            "time": "2016-09-13T10:29:17+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
